@@ -1,0 +1,93 @@
+<html>
+    <head>
+    <img src="images/slogan_fix.png"/>
+        <style>
+            body{
+                text-align:center;
+                font-family:sans-serif;
+            }
+        </style>
+    </head>
+<body background="images/Tes_Background_Wallpaper_6ns4w (1).jpg">
+ <div id="slogan"><img src="images/Tes_Background_Wallpaper_6ns4w (1).jpg" height="206" />
+     <br>
+     <br>
+     <br>
+     <br>
+<?php 
+include ("db.php");
+include("session.php");
+
+$Username=$_POST["Username"];
+$Password=$_POST["Password"];
+
+$pass=mysql_query("SELECT password FROM user WHERE email_id='$Username'");
+
+//$pass2=mysql_fetch_array($pass);
+//echo $pass2['password'];
+$pass2=mysql_fetch_array($pass);
+//echo $pass2['password'];
+$Password= md5($Password.'Bookworld$@)..^L');
+if($pass2['password']==$Password)
+{
+  echo "WELCOME";
+        echo "$Username";
+        $_SESSION["username"] =$Username;
+        header("location:index2.php");
+}
+
+else
+{
+	
+	echo "Incorrect Email id/Password combination !";
+        
+}
+
+
+
+?><br>
+<br>
+Forgot Password??<a href="sign_in.html"> <b> <br> Click here </b></a> to Re enter
+<br>
+<br> 
+    Don't have an account yet?<a href="sign_up.html"><b><br> Sign Up For Book World Now!</b></a>
+</body>
+</html>
+
+Session.php
+
+<?php 
+error_reporting(0);
+if(session_id()=='')
+{    
+  //echo "Hi1";  //session_register_shutdown();
+session_start();
+session_register("userid");
+session_register("username");//if he logins...
+session_register("path");
+session_register("prod_path");
+session_register("pname");
+session_register("cart_id");
+session_register("oid");
+session_register("total");
+session_register("reg_path");
+session_register("order");
+session_register("product");
+session_register("quantity");
+$_SESSION['sid'] =session_id();
+//echo $_SESSION['sid'];
+}
+?>
+
+
+Cat.php
+
+<?php include "db.php" ;
+$id = $_REQUEST['id'];//sub category id which user has selected
+$query = "SELECT * FROM product  WHERE  sub_cat_id ='$id' AND status=1";//all products under the selected sub category
+$cat_qry = mysql_query($query);
+$cat_rows = mysql_fetch_array($cat_qry);
+$num_rows = mysql_num_rows($cat_qry);
+header("Location: cat_products.php?cat_id=$id");//sending the sub category id
+
+?>
